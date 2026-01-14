@@ -1,0 +1,28 @@
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# Copy csproj files and restore dependencies
+COPY ["EmekKitabevi.API/EmekKitabevi.API.csproj", "EmekKitabevi.API/"]
+COPY ["EmekKitabevi.Application/EmekKitabevi.Application.csproj", "EmekKitabevi.Application/"]
+COPY ["EmekKitabevi.Domain/EmekKitabevi.Domain.csproj", "EmekKitabevi.Domain/"]
+COPY ["EmekKitabevi.Infrastructure/EmekKitabevi.Infrastructure.csproj", "EmekKitabevi.Infrastructure/"]
+
+RUN dotnet restore "EmekKitabevi.API/EmekKitabevi.API.csproj"
+
+# Copy everything else and build
+COPY . .
+WORKDIR "/src/EmekKitabevi.API"
+RUN dotnet build "EmekKitabevi.API.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "EmekKitabevi.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "EmekKitabevi.API.dll"]

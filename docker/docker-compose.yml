@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: emek-kitabevi-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - emek-kitabevi-network
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P YourStrong@Passw0rd -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  api:
+    build:
+      context: ../src/backend
+      dockerfile: ../../docker/Dockerfile.api
+    container_name: emek-kitabevi-api
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=EmekKitabeviDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;MultipleActiveResultSets=true
+      - JwtSettings__SecretKey=YourSuperSecretKeyForJWTTokenGeneration-Minimum32Characters
+      - JwtSettings__Issuer=EmekKitabevi
+      - JwtSettings__Audience=EmekKitabeviUsers
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - emek-kitabevi-network
+
+  frontend:
+    build:
+      context: ../src/frontend
+      dockerfile: ../../docker/Dockerfile.frontend
+    container_name: emek-kitabevi-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - api
+    networks:
+      - emek-kitabevi-network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  emek-kitabevi-network:
+    driver: bridge

@@ -1,0 +1,6 @@
+@EmekKitabevi.API_HostAddress = http://localhost:5211
+
+GET {{EmekKitabevi.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
