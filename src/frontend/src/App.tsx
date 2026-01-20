@@ -5,6 +5,9 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { BooksPage } from './pages/BooksPage';
+import { CreateBookPage } from './pages/CreateBookPage';
+import { BookDetailPage } from './pages/BookDetailPage';
 
 const theme = createTheme({
   palette: {
@@ -31,6 +34,38 @@ function App() {
               element={
                 <ProtectedRoute>
                   <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/books"
+              element={
+                <ProtectedRoute>
+                  <BooksPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/books/new"
+              element={
+                <ProtectedRoute>
+                  <CreateBookPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/books/:id"
+              element={
+                <ProtectedRoute>
+                  <BookDetailPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/books/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <BookDetailPage />
                 </ProtectedRoute>
               }
             />
