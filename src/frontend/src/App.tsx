@@ -8,6 +8,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { BooksPage } from './pages/BooksPage';
 import { CreateBookPage } from './pages/CreateBookPage';
 import { BookDetailPage } from './pages/BookDetailPage';
+import { TransactionsPage } from './pages/TransactionsPage';
 
 const theme = createTheme({
   palette: {
@@ -66,6 +67,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <BookDetailPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/transactions"
+              element={
+                <ProtectedRoute>
+                  <TransactionsPage />
                 </ProtectedRoute>
               }
             />

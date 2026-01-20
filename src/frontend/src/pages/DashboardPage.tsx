@@ -1,5 +1,5 @@
 import { Container, Typography, Box, Button, Paper, Grid } from '@mui/material';
-import { Book, MenuBook } from '@mui/icons-material';
+import { Book, MenuBook, ShoppingCart } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,7 +31,7 @@ export const DashboardPage = () => {
         </Paper>
 
         <Grid container spacing={3} sx={{ mt: 2 }}>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <Paper sx={{ p: 3, textAlign: 'center', cursor: 'pointer', '&:hover': { boxShadow: 4 } }}
               onClick={() => navigate('/books')}>
               <MenuBook sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
@@ -41,13 +41,23 @@ export const DashboardPage = () => {
               </Typography>
             </Paper>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={4}>
             <Paper sx={{ p: 3, textAlign: 'center', cursor: 'pointer', '&:hover': { boxShadow: 4 } }}
               onClick={() => navigate('/books/new')}>
               <Book sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
               <Typography variant="h6">Yeni Kitap</Typography>
               <Typography variant="body2" color="text.secondary">
                 Yeni kitap ekle
+              </Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper sx={{ p: 3, textAlign: 'center', cursor: 'pointer', '&:hover': { boxShadow: 4 } }}
+              onClick={() => navigate('/transactions')}>
+              <ShoppingCart sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />
+              <Typography variant="h6">İşlemler</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Satış, alış ve iade işlemleri
               </Typography>
             </Paper>
           </Grid>
